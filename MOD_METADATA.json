@@ -16,14 +16,16 @@
     "advisors": []
   },
   "lifecycle": {
-    "status": "experimental",
+    "status": "active_experimental",
     "default_enabled": false,
-    "activation_contract": "Import-only research descriptor; activation is refused until the StateAxis host contract and independent implementation are reviewed.",
-    "rollback_contract": "Disable or forget the descriptor and run the unchanged StateAxis host without this MOD."
+    "activation_contract": "Manifest 0.3 activation is owned by vLLM-HUST Extension Manager/ECPA. StateAxis accepts only version 0.2.0 with the pinned research-manifest hash and reviewed generation-bound sparse direct-patch policy.",
+    "rollback_contract": "Disable or forget the extension. StateAxis then uploads the full decode block table and slot vector on every batch."
   },
   "scope": {
     "mechanism": "device_resident_metadata_delta",
-    "supported_workloads": [],
+    "supported_workloads": [
+      "decode batches with stable row/state generation identity and sparse block-table growth"
+    ],
     "out_of_scope": [
       "general performance claims",
       "automatic inheritance from StateAxis aggregate evidence"
@@ -31,13 +33,13 @@
   },
   "evidence": {
     "qualification": "unqualified",
-    "latest_result": "evidence/RESULTS.md",
+    "latest_result": "evidence/ecpa-contract-20261011/RESULT.json",
     "index": "EVIDENCE.md",
     "performance_claims": [
       {
-        "label": "no-performance-claim",
-        "scope": "frozen StateAxis source evidence only",
-        "result": "The production candidate was not wired; observed runs used full metadata updates."
+        "label": "real-npu-component-bytes-positive-online-unqualified",
+        "scope": "fixed device-buffer append-update component cell",
+        "result": "Control and candidate device snapshots matched exactly; the tested update transferred 36 control bytes versus 12 candidate bytes. This is component byte-reduction evidence, not online serving performance evidence."
       }
     ]
   }

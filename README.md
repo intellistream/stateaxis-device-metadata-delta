@@ -2,41 +2,56 @@
 
 Extension ID: `org.vllm-hust.stateaxis-device-metadata-delta`
 
-Keep state metadata device-resident and apply generation-qualified deltas.
+This active experimental MOD implements the bounded first production mechanism
+for StateAxis issue [#5](https://github.com/Qixin-Gaoke/stateaxis/issues/5).
+Shuhao Zhang (Tony) is directly responsible; no advisor is declared.
 
-This repository is the independent MOD boundary for StateAxis issues [#5](https://github.com/Qixin-Gaoke/stateaxis/issues/5).
-It is deliberately `import_only`, default-off, and cannot be enabled. The split does
-not inherit correctness, device, performance, or publication qualification from the
-aggregate StateAxis repository.
+For decode rows whose state ID and generation remain stable, the worker retains
+the fixed device block-table and slot buffers and directly uploads only changed
+slot values and contiguous changed block ranges. A new row, generation change
+or uninitialized cache uploads the complete row. Dual microbatch invalidates
+the sparse cache and uses its existing full-upload path. The allocator remains
+the ownership authority and rejects stale generations.
 
-## Evidence boundary
+This revision uses sparse H2D writes into device-resident buffers. It does not
+contain or claim a device-side delta kernel. Historical V296/V297 changed full
+metadata uploads from synchronous to asynchronous; they are retained as
+historical evidence but are not treated as delta evidence.
 
-Status: **unwired**.
+## Activation
 
-The production candidate was not wired; observed runs used full metadata updates.
-
-The copied evidence and its SHA-256 are recorded in `PROVENANCE.json`. Negative,
-failed, and inconclusive results are retained. Microbenchmarks and component results
-must not be restated as online end-to-end gains.
-
-## Install and inspect
+Activation is default-off and must go through vLLM-HUST Extension Manager/ECPA:
 
 ```bash
 python -m pip install .
-vllm-hust-ext extension inspect org.vllm-hust.stateaxis-device-metadata-delta
-vllm-hust-ext extension check org.vllm-hust.stateaxis-device-metadata-delta
+VLLM_HUST_EXT_CONFIG=evidence/ecpa-contract-20261011/manager-config.json \
+  vllm-hust-ext extension check \
+  org.vllm-hust.stateaxis-device-metadata-delta
+VLLM_HUST_EXT_CONFIG=evidence/ecpa-contract-20261011/manager-config.json \
+  vllm-hust-ext extension plan \
+  org.vllm-hust.stateaxis-device-metadata-delta
 ```
 
-Discovery does not enable the MOD. A future active revision must extract an
-independently reviewable implementation, declare exclusive resources where needed,
-and pass exactness, lifecycle, release, failure-recovery, and matched real-online
-gates.
+StateAxis accepts only version `0.2.0` and the exact research-manifest SHA-256.
+Rollback disables the extension and restores full block-table and slot uploads.
+
+## Evidence boundary
+
+Rust matched runtime tests preserve exact output and record candidate decode
+batches/requests. The complete native worker builds against CANN/ATB 9.1. A
+real-NPU component pair produced identical device snapshots while the tested
+append update transferred 36 bytes in control and 12 bytes in candidate.
+
+That 66.67% byte reduction is a single small component cell. It is not an
+online latency or throughput result. A fresh identity-bound full-model artifact
+and alternating 3+3 service matrix remain required. See [EVIDENCE.md](EVIDENCE.md).
 
 ## Validate
 
 ```bash
 python -m pip install -e '.[test]'
+ruff check .
+ruff format --check .
 pytest -q
+python -m build
 ```
-
-Maintainer: Shuhao Zhang (Tony), directly responsible; no advisor is declared.

@@ -1,0 +1,78 @@
+{
+  "schema_version": "stateaxis-mod-on-off/v1",
+  "date_utc": "2026-10-11",
+  "mod_id": "org.vllm-hust.stateaxis-device-metadata-delta",
+  "mod_version": "0.2.0",
+  "research_manifest_sha256": "c4d312744857bd57de6b786064ce81034e46def59a37d21f74406de7a72f9fa0",
+  "evidence_label": "real-npu-component-bytes-positive-online-unqualified",
+  "performance_qualified": false,
+  "host": {
+    "repository": "Qixin-Gaoke/stateaxis",
+    "pull_request": 519,
+    "merge_commit": "a56d01af3d241fbf31d31f78e09d7d8d51231a72",
+    "assembly_and_state_graph_identity_bound": true,
+    "direct_parent_environment_activation_rejected": true,
+    "effect_counters": ["candidate_batches", "candidate_requests"]
+  },
+  "mechanism": {
+    "device_resident_fixed_buffers": true,
+    "generation_bound_row_cache": true,
+    "sparse_contiguous_h2d": true,
+    "full_row_identity_change_fallback": true,
+    "dual_microbatch_full_upload_fallback": true,
+    "device_kernel": false
+  },
+  "matched_runtime": {
+    "exact_output_match": true,
+    "off_candidate_counts": 0,
+    "on_candidate_batches_minimum": 2,
+    "on_candidate_requests_minimum": 2,
+    "lifecycle_shutdown": "passed"
+  },
+  "real_npu_component": {
+    "device_visible_index": 0,
+    "physical_device_from_pre_run_snapshot": 6,
+    "health": "OK",
+    "aicore_before_percent": 0,
+    "exact_device_snapshot_match": true,
+    "control_h2d_bytes": 36,
+    "candidate_h2d_bytes": 12,
+    "candidate_entries": 3,
+    "byte_reduction_percent": 66.6667,
+    "resource_release": "passed",
+    "evidence_scope": "single append-update component cell"
+  },
+  "matched_assembly": {
+    "off_fingerprint_sha256": "4ffa168ac70843663cb0a2961a95ae57c50d64dfa0d23f7a98d63bca04c17c30",
+    "on_fingerprint_sha256": "2f5d843724fd6f22dcb87371f6096eb6ffaaef48a204ff5cb6db1a9e2d57d66d"
+  },
+  "historical_boundary": {
+    "v296_v297_mechanism": "five same-stream asynchronous full decode metadata H2D copies",
+    "delta_evidence": false,
+    "accepted_hardware_result": false
+  },
+  "benchmark_outline": {
+    "matched_real_online_status": "NOT_RUN_FRESH_IDENTITY_BOUND_FULL_MODEL_ARTIFACT_REQUIRED",
+    "reason": "The active implementation changes the native worker build identity. A fresh sealed full-model artifact and repeated service matrix are required before online claims.",
+    "future_gate": "Run alternating 3+3 fresh-service Qwen2.5-14B decode-heavy cells at c=1/8/16/32, reporting metadata bytes/count, host preparation, executor, throughput, TTFT, TPOT, HBM, exactness and release."
+  },
+  "validation": {
+    "rust_library_tests": "430 passed",
+    "cargo_check_lib_bins": "passed",
+    "cpp_complete_worker_build": "passed with CANN 9.1 and ATB 9.1",
+    "cpp_cpu_delta_contract": "passed",
+    "python_tests": "2 passed",
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "package_build": "passed",
+    "extension_manager_check_plan_dry_run": "passed",
+    "managed_assembly_check_process": "passed",
+    "real_npu_component_on_off": "passed"
+  },
+  "limitations": [
+    "no device-side delta kernel is implemented or claimed",
+    "row reorder and generation change require a full-row upload",
+    "dual microbatch uses the full-upload fallback",
+    "no real-online performance result or speedup claim"
+  ]
+}

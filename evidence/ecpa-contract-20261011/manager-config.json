@@ -1,0 +1,15 @@
+{
+  "schema_version": 2,
+  "extensions": {
+    "org.vllm-hust.stateaxis-device-metadata-delta": {
+      "enabled": true,
+      "configuration": {
+        "experiment_mode": true,
+        "host_api_version": "1.0",
+        "host_version": "1.0",
+        "protocol_versions": {"stateaxis.mod-proposal.device-metadata-delta": "1.0"},
+        "research_manifest_path": "RESEARCH_MANIFEST.json"
+      }
+    }
+  }
+}
