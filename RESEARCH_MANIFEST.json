@@ -1,0 +1,31 @@
+{
+  "schema_version": "stateaxis-mod-research/v1",
+  "mod_id": "org.vllm-hust.stateaxis-device-metadata-delta",
+  "release_version": "0.2.0",
+  "source": {
+    "repository": "Qixin-Gaoke/stateaxis",
+    "issue": 5,
+    "scope": "generation-bound sparse decode block-table and slot patches into fixed device buffers"
+  },
+  "mechanism": {
+    "enabled": true,
+    "scope": "decode-block-table-and-slot-direct-patch",
+    "device_resident_buffers": true,
+    "generation_bound_row_cache": true,
+    "sparse_contiguous_h2d": true,
+    "device_kernel": false,
+    "exact_host_shadow": true,
+    "full_row_on_identity_change": true,
+    "full_row_on_uninitialized_cache": true,
+    "dual_microbatch_fallback_to_full_upload": true,
+    "stale_generation_rejected_by_allocator": true,
+    "fixed_device_addresses": true,
+    "fail_closed": true
+  },
+  "evidence_boundary": {
+    "performance_qualified": false,
+    "device_kernel_claim": false,
+    "historical_async_full_upload_is_not_delta_evidence": true,
+    "required_result": "prove exact sparse device-buffer patching and lifecycle reset before any online performance claim"
+  }
+}
