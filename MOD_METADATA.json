@@ -18,13 +18,13 @@
   "lifecycle": {
     "status": "active_experimental",
     "default_enabled": false,
-    "activation_contract": "Manifest 0.3 activation is owned by vLLM-HUST Extension Manager/ECPA. StateAxis accepts only version 0.2.0 with the pinned research-manifest hash and reviewed generation-bound sparse direct-patch policy.",
+        "activation_contract": "Manifest 0.3 activation is owned by vLLM-HUST Extension Manager/ECPA. StateAxis accepts only version 0.2.0 with the pinned research-manifest hash and reviewed generation-bound delta policy; the host implementation adaptively coalesces multi-row or multi-range H2D updates.",
     "rollback_contract": "Disable or forget the extension. StateAxis then uploads the full decode block table and slot vector on every batch."
   },
   "scope": {
     "mechanism": "device_resident_metadata_delta",
     "supported_workloads": [
-      "decode batches with stable row/state generation identity and sparse block-table growth"
+            "decode batches with stable row/state generation identity, per-step slot updates and infrequent block-table growth"
     ],
     "out_of_scope": [
       "general performance claims",
@@ -32,15 +32,20 @@
     ]
   },
   "evidence": {
-    "qualification": "unqualified",
-    "latest_result": "evidence/ecpa-contract-20261011/RESULT.json",
+        "qualification": "component_positive_online_unqualified",
+        "latest_result": "evidence/component-npu-adaptive-coalescing-20261013/README.md",
     "index": "EVIDENCE.md",
     "performance_claims": [
-      {
-        "label": "real-npu-component-bytes-positive-online-unqualified",
-        "scope": "fixed device-buffer append-update component cell",
-        "result": "Control and candidate device snapshots matched exactly; the tested update transferred 36 control bytes versus 12 candidate bytes. This is component byte-reduction evidence, not online serving performance evidence."
-      }
+            {
+                "label": "real-npu-component-bytes-positive-online-unqualified",
+                "scope": "fixed device-buffer append-update component cell",
+                "result": "Control and candidate device snapshots matched exactly; the tested update transferred 36 control bytes versus 12 candidate bytes. This is component byte-reduction evidence, not online serving performance evidence."
+            },
+            {
+                "label": "component-npu-matched-adaptive-positive-online-unqualified",
+                "scope": "Ascend 910B2 metadata preparation plus synchronized H2D, 32 blocks per row, decode-128 cycle, B1/B8/B32",
+                "result": "Exact snapshots on two devices. Adaptive candidate median speedups were 1.92x/1.88x/1.85x on device 0 and 1.91x/1.87x/1.86x on device 1. Row-sparse B8/B32 negatives are retained. This is component evidence and does not claim online request throughput."
+            }
     ]
   }
 }

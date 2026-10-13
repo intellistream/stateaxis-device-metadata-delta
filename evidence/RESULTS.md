@@ -5,6 +5,25 @@
 > [`NATIVE_ENGINE_STATUS.md`](NATIVE_ENGINE_STATUS.md) for current capability and
 > default-state classification, and [`README.md`](README.md) for fact precedence.
 
+## Device metadata delta adaptive-coalescing component, 2026-10-13
+
+The matched real-NPU component campaign on two Ascend 910B2 devices passed exact
+device-snapshot comparison for B1, B8 and B32 across unchanged, slot-only,
+decode-128, one-block, fragmented-four and generation-change cells. The
+decode-128 cell updates slots every step and block metadata once per 128 steps.
+Its adaptive candidate median speedups were 1.9196x/1.8787x/1.8481x on device 0
+and 1.9148x/1.8746x/1.8591x on device 1 for B1/B8/B32.
+
+The retained negative baseline is material: row-wise sparse decode-128 measured
+1.9167x/0.2544x/0.0681x on device 0. At B32 it issued 32.256 H2D calls per step
+despite transferring only 129.024 bytes. Adaptive coalescing reduced that to
+1.008 calls per step; fragmented-four is capped at two calls but remains
+0.8199x at B32 because host planning is included. See
+`component-npu-adaptive-coalescing-20261013/` for raw JSONL and reproduction.
+
+Evidence label: `component_npu_matched`. This result does not qualify online
+latency, end-to-end throughput, Qwen3.5-35B, AgentX or default enablement.
+
 ## Qwen3.8 r476 producer-hinted rendezvous result
 
 r476 adds a producer-declared finite-arrival identity and target to r475's
